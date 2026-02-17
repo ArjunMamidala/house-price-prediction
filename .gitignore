@@ -5,3 +5,6 @@
 __pycache__/
 .DS_Store
 venv/
+models/*.joblib
+predictions.db
+frontend/package-lock.json

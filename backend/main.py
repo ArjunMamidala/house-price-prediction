@@ -2,7 +2,7 @@ from fastapi import FastAPI
 import joblib
 import os
 import pandas as pd
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 import sqlite3
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -28,15 +28,24 @@ cur.execute('''CREATE TABLE IF NOT EXISTS predictions (
 )''')
 con.commit()
 
-best_model = joblib.load(os.path.join('..', 'models', 'best_model.joblib'))
-encoder = joblib.load(os.path.join('..', 'models', 'encoder.joblib'))
-scaler = joblib.load(os.path.join('..', 'models', 'scaler.joblib'))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODELS_DIR = os.path.join(BASE_DIR, '..', 'models') if os.path.exists(os.path.join(BASE_DIR, '..', 'models')) else '/app/models'
+
+best_model = joblib.load(os.path.join(MODELS_DIR, 'best_model.joblib'))
+encoder = joblib.load(os.path.join(MODELS_DIR, 'encoder.joblib'))
+scaler = joblib.load(os.path.join(MODELS_DIR, 'scaler.joblib'))
 
 class HouseInput(BaseModel):
     bed: int = Field(ge=0)
     bath: int = Field(ge=1)
     city: str
     house_size: float = Field(gt=0)
+
+    @field_validator('city')
+    def city_must_be_text(cls, v):
+        if v.strip() == '' or v.replace(' ', '').isdigit():
+            raise ValueError('City must be a valid name, not a number')
+        return v.strip()
 
 @app.post("/predict")
 async def predict(data: HouseInput):

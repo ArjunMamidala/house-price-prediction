@@ -59,19 +59,19 @@ function App() {
     <form onSubmit={handleSubmit}>
       <div className="form-group">
         <label>Bedrooms</label>
-        <input type="number" name="bed" value={formData.bed} onChange={handleChange} placeholder="e.g. 3" />
+        <input type="number" name="bed" value={formData.bed} onChange={handleChange} placeholder="e.g. 3" required />
       </div>
       <div className="form-group">
         <label>Bathrooms</label>
-        <input type="number" name="bath" value={formData.bath} onChange={handleChange} placeholder="e.g. 2" />
+        <input type="number" name="bath" value={formData.bath} onChange={handleChange} placeholder="e.g. 2" required />
       </div>
       <div className="form-group">
         <label>City</label>
-        <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder="e.g. San Juan" />
+        <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder="e.g. San Juan" required />
       </div>
       <div className="form-group">
         <label>House Size (sqft)</label>
-        <input type="number" name="house_size" value={formData.house_size} onChange={handleChange} placeholder="e.g. 1500" />
+        <input type="number" name="house_size" value={formData.house_size} onChange={handleChange} placeholder="e.g. 1500" required />
       </div>
       <button type="submit" className="submit-btn">Predict Price</button>
     </form>
